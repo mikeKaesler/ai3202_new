@@ -11,6 +11,8 @@ samples = [0.82,	0.56,	0.08,	0.81,	0.34,	0.22,	0.37,	0.99,	0.55,	0.61,	0.31,	0.6
 0.9,	0.0,	0.91,	0.01]
 
 
+#prior sampling
+
 #splice every 4th element starting at 
 cloudy = samples[::4] #index 0    all the samples used to determine if cloudy
 sprinkler = samples[1::4] #index1  " " sprinkler on
@@ -134,5 +136,68 @@ for i in xrange(len(cloudy_bin)):
 print "sprinkler is true given cloudy is true and wet grass is true"
 print numerator2
 print denominator2
+
+#rejection sampling
+
+#P(C=true)
+CT_bin = []
+
+for i in xrange(len(samples)):
+	if (samples[i] < 0.5):
+		CT_bin.append(1)
+	else:
+		CT_bin.append(0)
+
+#denominator3 = 0 actually dont need
+numerator3 = 0
+
+for i in xrange(len(CT_bin)):
+	if (CT_bin[i] == 1):
+		numerator3 += 1
+print "cloudy is true in rejection is", numerator3
+
+#P(c=true|rain=true)
+#splice every two
+cloudy1 = samples[::2]
+rain1 = samples[1::2]
+
+cloudy1_bin = []
+rain1_bin = []
+
+for i in xrange(len(cloudy1)):
+	if (cloudy1[i] < 0.5): #cloudy is true
+		cloudy1_bin.append(1)
+		if (rain1[i] < 0.8): #rain is true
+			rain1_bin.append(1)
+		else: #rain is false
+			rain1_bin.append(0)
+	else: #cloudy is false
+		cloudy1_bin.append(0)
+		if (rain1[i] < .2): #rain is true
+			rain1_bin.append(1)
+		else:
+			rain1_bin.append(0)
+
+denominator5 = 0
+numerator5 = 0	
+for i in xrange(len(cloudy1_bin)):
+	if (rain1_bin[i] == 1):
+		denominator5 += 1
+	if (rain1_bin[i] == 1 and cloudy1_bin[i] == 1):
+		numerator5 += 1
+
+print "rejection prob cloudy is true given rain is true"
+print numerator5
+print denominator5
+
+
+#since question 3 pard c and d both use all four nodes, and as such the 
+#samples will be spliced into 4 agian, the probabilites will be the same
+#as in question 1 part c and d, so, I will not re include those here
+
+
+		
+
+
 	
 
